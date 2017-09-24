@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>year</title>
+  <script src="js/jquery-2.1.4.js"></script>
+</head>
+<body>
+<select class="js-year"></select>
+<select class="js-num"></select>
+</body>
+</html>
+<script>
+  var datas = [
+     ["201401","201402","201403","201501","201502","201503","201504","201505","201506","201507","201508","201601","201602","201603","201604","201605","201701","201702","201703","201704","201705","201706","201707","201708","201709","201710","201711","201712","201713","201801","201802"]
+  ];
+  var years = {};
+  datas[0].forEach(function(v){
+    var year = v.substring(0,4), num = v.substring(4);
+    if (years[year] == undefined) {
+      years[year]= [];
+    }
+    var length = years[year].length;
+    years[year][length] = num;
+  });
+  //遍历years,给年份的select添加选项
+  for (var key in this.years) {
+    $('.js-year').append('<option value="' + key + '">' + key + '</option>');
+  }
+  //给年份的select添加change事件，改变年份的时候，清空并赋值数量的select，其值从years中获取
+  $('.js-year').on('change', function(){
+    var year = $(this).val();
+    var nums = years[year];
+    $('.js-num').empty();
+    nums.forEach(function(v){
+      $('.js-num').append('<option value="' + v + '">' + v + '</option>');
+    });
+    //如果是今年的话，数量的select选项添加一个选项，值+1
+    //今年
+    var nowYear = new Date().getFullYear();
+    if (year == nowYear) {
+      var maxNum = $('.js-num option:last').val();
+      var nextNum = parseInt(maxNum) + 1;
+      $('.js-num').append('<option value="' + nextNum + '">' + nextNum + '</option>');
+    }
+  });
+  //触发change事件，默认给第一个年份对应的数量的select赋值
+  $('.js-year').change();
+</script>
